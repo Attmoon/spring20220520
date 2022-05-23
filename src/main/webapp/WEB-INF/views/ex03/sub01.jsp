@@ -11,6 +11,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 
 	<script>
+	// 페이지 전체로딩없이 일부 데이터만 받으려할때 ajax를 사용 
 		$(document).ready(function() {
 			$("#button1").click(function() {
 				$.ajax({url : "/spr2/ex03/sub03"});
@@ -96,6 +97,75 @@
 					data : "title=dream&writer=suhyun"
 				});
 			});
+			
+			$("#button12").click(function(e) {
+				e.preventDefault(); // submit되지않게 막는코드
+				
+				const dataString = $("#form1").serialize() // submit을 위한 string으로 만들어줌
+				
+				$.ajax({
+					url : "/spr2/ex03/sub10",
+					type : "post",
+					data : dataString
+				});
+			});
+			
+			$("#button13").click(function(e) {
+				e.preventDefault(); 
+				
+				const dataString = $("#form2").serialize()
+				
+				$.ajax({
+					url : "/spr2/ex03/sub11",
+					type : "post",
+					data : dataString
+				});
+			});
+			
+			$("#button14").click(function() {
+				$.ajax({
+					url : "/spr2/ex03/sub12",
+					type : "post",
+					success : function(data) { // 파라미터에 데이터를 3개 받을수있음(응답받은 data)
+						console.log("요청 성공!!");
+						console.log("받은 데이터", data);
+					}
+				});
+			});
+			
+			$("#button15").click(function() {
+				$.ajax({
+					url : "/spr2/ex03/sub13",
+					type : "get",
+					success : function(lotto) {
+						// console.log(data);
+						$("#result1").text(lotto);
+					}
+				});
+			});
+			
+			$("#button16").click(function() {
+				$.ajax({
+					url : "/spr2/ex03/sub14",
+					type : "get",
+					success : function(book) {
+						//console.log(book);
+						//console.log(book.title);
+						//console.log(book.writer);
+						$("#result2").text(book.title);
+						$("#result3").text(book.writer);
+					}
+				});
+			});
+			
+			$("#button17").click(function() {
+				$.ajax({
+					url : "/spr2/ex03/sub15",
+					success : function(data) {
+						console.log(data);
+					}
+				});
+			});
 		});
 	</script>
 <title>Insert title here</title>
@@ -142,6 +212,41 @@
 	<%-- /spr2/ex03/sub11 post방식으로 데이터 보내기 --%>
 	<%-- 전송될 데이터는 title, writer --%>
 	<button id="button11">post방식으로 데이터 보내기2 (encoded string)</button>
+	
+	<hr />
+	
+	<p>폼 데이터 보내기</p>
+	<form action="/spr2/ex03/sub10" id="form1" method="post">
+		name : <input type="text" name="name" /> <br />
+		address : <input type="text" name="address" /> <br />
+		<input id="button12" type="submit" value="전송" />
+	</form>
+	
+	<%-- button13이 클릭되면  --%>
+	<%-- /spr2/ex03/sub11로 post방식 ajax 요청 전송 --%>
+	<form id="form2">
+		title : <input type="text" name="title" /> <br />
+		writer : <input type="text" name="writer" /> <br />
+		<input type="submit" value="전송" id="button13" />
+	</form>
+	
+	<hr />
+	
+	<p>응답 처리 하기</p>
+	
+	<%-- url : /spr2/ex03/sub12, type : post,  --%>
+	<button id="button14">응답처리1</button>
+	
+	<br />
+	
+	<button id="button15">로또번호 받기</button>
+	<p>받은 번호: <span id="result1"></span></p>
+	
+	<button id="button16">json 데이터 받기</button>
+	<p>책 제목 : <span id="result2"></span></p>
+	<p>책 저자 : <span id="result3"></span></p>
+	
+	<button id="button17">map 데이터 받기</button>
 	
 </body>
 </html>
