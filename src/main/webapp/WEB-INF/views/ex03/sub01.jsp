@@ -15,11 +15,37 @@
 			$("#button1").click(function() {
 				$.ajax({url : "/spr2/ex03/sub03"});
 			});
-		});
-		
-		$(document).ready(function() {
+			
 			$("#button2").click(function() {
 				$.ajax({url : "/spr2/ex03/sub04"});
+			});
+			
+			$("#button3").click(function() {
+				$.ajax({
+					url : "/spr2/ex03/sub05", 
+					type : "get"
+				});
+			});
+			
+			$("#button4").click(function() {
+				$.ajax({
+					url : "/spr2/ex03/sub06", // 어디로
+					type : "post"			  // 어떤방식으로 (type혹은 method)
+				});
+			});
+			
+			$("#button5").click(function() {
+				$.ajax({
+					url : "/spr2/ex03/sub07",
+					type : "delete"
+				});
+			});
+			
+			$("#button6").click(function() {
+				$.ajax({
+					url : "/spr2/ex03/sub08",
+					type : "put"
+				});
 			});
 		});
 	</script>
@@ -30,6 +56,23 @@
 	
 	<%-- 이 버튼을 클릭하면 /spr2/ex03/sub04로 ajax 요청 보내기 --%>
 	<%-- 컨트롤러에도 해당경로 요청에 일하는 메소드 추가 --%>
-	<button id="button2">ajax 요청 보내기</button>
+	<button id="button2">ajax 요청 보내기2</button>
+	
+	<br />
+	
+	<%-- /spr2/ex03/sub05 get 방식 요청 보내기 --%>
+	<button id="button3">get 방식 요청 보내기</button>
+	
+	<%-- /spr2/ex03/sub06 post 방식 요청 보내기 --%>
+	<button id="button4">post 방식 요청 보내기</button>
+	
+	<%-- /spr2/ex03/sub07 delete 방식 요청 보내기 --%>
+	<button id="button5">delete 방식 요청 보내기</button>
+	
+	<%-- /spr2/ex03/sub08 put 방식 요청 보내기 --%>
+	<button id="button6">put 방식 요청 보내기</button>
+	
+	
+	
 </body>
 </html>
