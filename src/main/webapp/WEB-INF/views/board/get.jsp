@@ -130,6 +130,33 @@
 				console.log("댓글 가져오기 실패");
 			}
 		});
+		
+		// addReplySubmitButton1 버튼 클릭시 ajax 댓글 추가 요청
+		$("#addReplySubmitButton1").click(function(e) {
+			e.preventDefault();
+			
+			const data = $("#insertReplyForm1").serialize();
+			$.ajax({
+				url : "${appRoot }/reply/insert",
+				type : "post",
+				data : data,
+				success : function(data) {
+					// 새 댓글 등록되었다는 메시지 출력
+					$("#replyMessage1").show().text(data).fadeOut(3000);
+					
+					// text input 초기화
+					
+					// 모든 댓글 가져오는 ajax 요청
+					console.log(data);
+				},
+				error : function() {
+					console.log("문제 발생");
+				},
+				complete : function() {
+					console.log("요청 완료");
+				}
+			});
+		});
 	});
 </script>
 
@@ -187,16 +214,19 @@
 	<div class="container mt-3">
 		<div class="row">
 			<div class="col">
-				<form action="${appRoot }/reply/insert" method="post">
+				<form id="insertReplyForm1">
 					<div class="input-group">
 						<input type="hidden" name="boardId" value="${board.id }" />
 						<input class="form-control" type="text" name="content" required />
-						<button class="btn btn-outline-secondary">
+						<button id="addReplySubmitButton1" class="btn btn-outline-secondary">
 							<i class="fa-solid fa-comment-dots"></i>
 						</button>
 					</div>
 				</form>
 			</div>
+		</div>
+		<div class="row">
+			<div class="alert alert-primary" style="display:none; " id="replyMessage1"></div>
 		</div>
 	</div>
 
@@ -257,8 +287,7 @@
 
 	<%-- reply 삭제 form --%>
 	<div class="d-none">
-		<form id="replyDeleteForm1" action="${appRoot }/reply/delete"
-			method="post">
+		<form>
 			<input id="replyDeleteInput1" type="text" name="id" />
 			<input type="text" name="boardId" value="${board.id }" />
 		</form>
