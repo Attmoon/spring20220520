@@ -61,75 +61,109 @@
 			$(editFormId).show();
 		});
 
-		// reply-delete-button 클릭시
-		$(".reply-delete-button").click(function() {
-			const replyId = $(this).attr("data-reply-id");
-			const message = "댓글을 삭제하시겠습니까?";
-
-			if (confirm(message)) {
-				$("#replyDeleteInput1").val(replyId);
-				$("#replyDeleteForm1").submit();
-			}
-		});
 		
-		// 페이지 로딩 후 reply list 가져오는 ajax 요청
-		 
-		const data = {boardId : ${board.id}}; // boardId라는 이름의 data는 board.id의 값을 가져옴 그리고 그걸 data라는 이름에 넣음
-		$.ajax({
-			url : "${appRoot}/reply/list",
-			type : "get",
-			data : data,
-			success : function(list) {
-				// console.log("댓글 가져 오기 성공");
-				console.log(list);
-				
-				const replyListElement = $("#replyList1");
-				for (let i = 0; i < list.length; i++) {
-					const replyElement = $("<li class='list-group-item' />");
-					replyElement.html(`
-							
-							<div id="replyDisplayContainer\${list[i].id }">
-								<div class="fw-bold">
-									<i class="fa-solid fa-comment"></i>
-									\${list[i].prettyInserted}
-									<span class="reply-edit-toggle-button badge bg-info text-dark"
-										id="replyEditToggleButton\${list[i].id }"
-										data-reply-id="\${list[i].id }">
-										<i class="fa-solid fa-pen-to-square"></i>
-									</span>
-									<span class="reply-delete-button badge bg-danger"
-										data-reply-id="\${list[i].id }">
-										<i class="fa-solid fa-trash-can"></i>
-									</span>
-								</div>
-								\${list[i].content }
-
-
-							</div>
-
-							<div id="replyEditFormContainer\${list[i].id }"
-								style="display: none;">
-								<form action="${appRoot }/reply/modify" method="post">
-									<div class="input-group">
-										<input type="hidden" name="boardId" value="${board.id }" />
-										<input type="hidden" name="id" value="\${list[i].id }" />
-										<input class="form-control" value="\${list[i].content }"
-											type="text" name="content" required />
-										<button class="btn btn-outline-secondary">
-											<i class="fa-solid fa-comment-dots"></i>
-										</button>
+		
+		
+		// 페이지 로딩 후 reply list 가져오는 ajax 요청 (함수)
+		const listReply = function() {
+			 
+			const data = {boardId : ${board.id}}; // boardId라는 이름의 data는 board.id의 값을 가져옴 그리고 그걸 data라는 이름에 넣음
+			$.ajax({
+				url : "${appRoot}/reply/list",
+				type : "get",
+				data : data,
+				success : function(list) {
+					// console.log("댓글 가져 오기 성공");
+					console.log(list);
+					
+					const replyListElement = $("#replyList1");
+					replyListElement.empty(); // for문돌리기전에 내용물 지우기
+					
+					// 댓글 개수 표시
+					$("#numOfReply1").text(list.length); // numOfReply1의 내용물을 list의 length로
+					
+					for (let i = 0; i < list.length; i++) {
+						const replyElement = $("<li class='list-group-item' />");
+						replyElement.html(`
+								
+								<div id="replyDisplayContainer\${list[i].id }">
+									<div class="fw-bold">
+										<i class="fa-solid fa-comment"></i>
+										\${list[i].prettyInserted}
+										<span class="reply-edit-toggle-button badge bg-info text-dark"
+											id="replyEditToggleButton\${list[i].id }"
+											data-reply-id="\${list[i].id }">
+											<i class="fa-solid fa-pen-to-square"></i>
+										</span>
+										<span class="reply-delete-button badge bg-danger"
+											data-reply-id="\${list[i].id }">
+											<i class="fa-solid fa-trash-can"></i>
+										</span>
 									</div>
-								</form>
-							</div>
+									\${list[i].content }
+	
+	
+								</div>
+	
+								<div id="replyEditFormContainer\${list[i].id }"
+									style="display: none;">
+									<form action="${appRoot }/reply/modify" method="post">
+										<div class="input-group">
+											<input type="hidden" name="boardId" value="${board.id }" />
+											<input type="hidden" name="id" value="\${list[i].id }" />
+											<input class="form-control" value="\${list[i].content }"
+												type="text" name="content" required />
+											<button class="btn btn-outline-secondary">
+												<i class="fa-solid fa-comment-dots"></i>
+											</button>
+										</div>
+									</form>
+								</div>
+								
+								`);
+						replyListElement.append(replyElement);
+						
+					} // end of for
+					
+					// 삭제 버튼 클릭 이벤트 메소드 등록
+					// reply-delete-button 클릭시
+					$(".reply-delete-button").click(function() {
+						const replyId = $(this).attr("data-reply-id");
+						const message = "댓글을 삭제하시겠습니까?";
+
+						if (confirm(message)) {
+							// $("#replyDeleteInput1").val(replyId);
+							// $("#replyDeleteForm1").submit();
 							
-							`);
-					replyListElement.append(replyElement);
+							$.ajax({
+								url : "${appRoot}/reply/delete/" + replyId,
+								type : "delete",
+								success : function(data) {
+									// console.log(replyId + "댓글 삭제됨");	
+									// 댓글 list refresh
+									listReply();
+									// 메세지 출력
+									$("#replyMessage1").show().text(data).fadeOut(3000);
+								},
+								error : function() {
+									console.log(replyId + "댓글 삭제 중 문제 발생됨");
+								},
+								complete : function() {
+									console.log(replyId + "댓글 삭제 요청 끝")
+								}
+							});
+						}
+					});
+				},
+				error : function() {
+					console.log("댓글 가져오기 실패");
 				}
-			},
-			error : function() {
-				console.log("댓글 가져오기 실패");
-			}
-		});
+			});
+		
+		}
+		
+		// 댓글 가져오는 함수 실행
+		listReply();
 		
 		// addReplySubmitButton1 버튼 클릭시 ajax 댓글 추가 요청
 		$("#addReplySubmitButton1").click(function(e) {
@@ -145,9 +179,13 @@
 					$("#replyMessage1").show().text(data).fadeOut(3000);
 					
 					// text input 초기화
+					$("#insertReplyContentInput1").val(""); // 댓글 입력후 input에서는 지워지게함
 					
 					// 모든 댓글 가져오는 ajax 요청
-					console.log(data);
+					// 댓글 가져오는 함수 실행
+					listReply();
+					
+					// console.log(data);
 				},
 				error : function() {
 					console.log("문제 발생");
@@ -217,7 +255,7 @@
 				<form id="insertReplyForm1">
 					<div class="input-group">
 						<input type="hidden" name="boardId" value="${board.id }" />
-						<input class="form-control" type="text" name="content" required />
+						<input id="insertReplyContentInput1" class="form-control" type="text" name="content" required />
 						<button id="addReplySubmitButton1" class="btn btn-outline-secondary">
 							<i class="fa-solid fa-comment-dots"></i>
 						</button>
@@ -236,7 +274,7 @@
 	<div class="container mt-3">
 		<div class="row">
 			<div class="col">
-				<h3>댓글 ${board.numOfReply } 개</h3>
+				<h3>댓글 <span id="numOfReply1"></span> 개</h3>
 
 				<ul id="replyList1" class="list-group">
 					<%-- 

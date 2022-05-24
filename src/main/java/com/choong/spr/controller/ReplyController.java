@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -48,16 +50,17 @@ public class ReplyController {
 		return "redirect:/board/get";
 	}
 	
-	@PostMapping("delete")
-	public String delete(ReplyDto dto, RedirectAttributes rttr) {
-		boolean success = service.deleteReply(dto);
+	@DeleteMapping(path = "delete/{id}", produces = "text/plain;charset=UTF-8" )
+	@ResponseBody
+	public ResponseEntity<String> delete(@PathVariable("id") int id) {
+		boolean success = service.deleteReply(id);
 		
 		if (success) {
-			rttr.addFlashAttribute("messag", "댓글이 삭제되었습니다.");
+			return ResponseEntity.ok("댓글을 삭제 하였습니다.");
+		} else {
+			return ResponseEntity.status(500).body(""); // 에러메시지 없음
 		}
 		
-		rttr.addAttribute("id", dto.getBoardId());
-		return "redirect:/board/get";
 	}
 	
 	// ajax가 mapping경로로 요청을 보내고 service가 일한 결과를 List<Replydto> 형식으로 응답해줌
