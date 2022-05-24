@@ -204,6 +204,40 @@
 					}
 				});
 			});
+			
+			$("#button21").click(function() {
+				$.ajax({
+					url : "/spr2/ex03/sub18",
+					success : function(data) {
+						$("#message20").show();
+						$("#message20").removeClass("error").text(data).fadeOut(3000);
+					},
+					
+					error : function(data) {
+						$("#message20").show();
+						$("#message20").addClass("error").text("무엇인가 잘못됨").fadeOut(3000);
+					}
+				});
+			});
+			
+			$("#button22").click(function() {
+				$.ajax({
+					url : "/spr2/ex03/sub18",
+					success : function(data) {
+						$("#message20").show();
+						$("#message20").removeClass("error").text(data).fadeOut(3000);
+					},
+					
+					error : function(data) {
+						$("#message20").show();
+						$("#message20").addClass("error").text("무엇인가 잘못됨").fadeOut(3000);
+					},
+					
+					complete : function() {
+						console.log("항상 실행됨!!!");
+					}
+				});
+			});
 		});
 	</script>
 	
@@ -303,6 +337,12 @@
 	
 	<button id="button20">서버에서 에러 응답</button>
 	
+	<br />
 	
+	<button id="button21">50%확률로 ok</button>
+	
+	<p id="message20"></p>
+	
+	<button id="button22">50%확률로 ok</button>
 </body>
 </html>

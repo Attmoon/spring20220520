@@ -136,4 +136,15 @@ public class Ex03Controller {
 		return ResponseEntity.status(500).body("internal server error");
 		
 	}
+	
+	@GetMapping("sub18")
+	public ResponseEntity<String> method18() {
+		boolean success = Math.random() > 0.5; // 50% 확률로 성공
+		
+		if (success) {
+			return ResponseEntity.ok().body("data you want");
+		} else {
+			return ResponseEntity.status(500).body("something wrong");
+		}
+	}
 }
