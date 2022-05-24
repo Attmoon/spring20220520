@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -41,7 +42,7 @@ public class ReplyController {
 
 	@PutMapping(path = "modify", produces = "text/plain;charset=UTF-8")
 	@ResponseBody
-	public ResponseEntity<String> modify(ReplyDto dto) {
+	public ResponseEntity<String> modify(@RequestBody ReplyDto dto) {
 		boolean success = service.updateReply(dto);
 
 		if (success) {

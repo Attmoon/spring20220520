@@ -113,19 +113,26 @@
 						
 						const id = $(this).attr("data-reply-id");
 						const formElem = $("#replyEditFormContainer" + id).find("form"); // replyEditFormContainer안에서 form을 찾음
-						const data = formElem.serialize();
+						// const data = formElem.serialize(); // put 방식은 controller에서 못받음
+						const data = {
+							boardId : formElem.find("[name=boardId]").val(),
+							id : formElem.find("[name=id]").val(),
+							content : formElem.find("[name=content]").val()
+						};
 						
 						$.ajax({
 							url : "${appRoot}/reply/modify",
 							type : "put",
-							data : data,
-							success : function() {
+							data : JSON.stringify(data), // JSON형식으로 data를 보냄
+							contentType : "application/json",
+							success : function(data) {
 								console.log("수정 성공");
 								
 								// 메세지 보여주기
+								$("#replyMessage1").show().text(data).fadeOut(3000);
 								
 								// 댓글 refresh
-								
+								listReply();
 							},
 							error : function() {
 								console.log("수정 실패");
