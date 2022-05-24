@@ -66,6 +66,21 @@
 				$("#replyDeleteForm1").submit();
 			}
 		});
+		
+		// 페이지 로딩 후 reply list 가져오는 ajax 요청
+		
+		const data = {boardId : ${board.id}}; // boardId라는 이름은 board.id의 값을 가져옴 그리고 그걸 data라는 이름에 넣음
+		$.ajax({
+			url : "${appRoot}/reply/list",
+			type : "get",
+			data : data,
+			success : function(list) {
+				console.log("댓글 가져오기 성공");
+			},
+			error : function() {
+				console.log("댓글 가져오기 실패");
+			}
+		});
 	});
 </script>
 
@@ -142,7 +157,8 @@
 			<div class="col">
 				<h3>댓글 ${board.numOfReply } 개</h3>
 			
-				<ul class="list-group">
+				<ul id="replyList1" class="list-group">
+					<%-- 
 					<c:forEach items="${replyList }" var="reply">
 						<li class="list-group-item">
 							<div id="replyDisplayContainer${reply.id }">
@@ -175,6 +191,7 @@
 						 	
 						</li>
 					</c:forEach>
+					--%>
 				</ul>
 			</div>
 		</div>
