@@ -1,5 +1,6 @@
 package com.choong.spr.controller;
 
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,9 +11,9 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.choong.spr.domain.ReplyDto;
 import com.choong.spr.service.ReplyService;
@@ -38,16 +39,16 @@ public class ReplyController {
 
 	}
 
-	@PostMapping("modify")
-	public String modify(ReplyDto dto, RedirectAttributes rttr) {
+	@PutMapping(path = "modify", produces = "text/plain;charset=UTF-8")
+	@ResponseBody
+	public ResponseEntity<String> modify(ReplyDto dto) {
 		boolean success = service.updateReply(dto);
 
 		if (success) {
-			rttr.addFlashAttribute("message", "댓글이 수정되었습니다.");
+			return ResponseEntity.ok("댓글이 변경되었습니다.");
 		}
-
-		rttr.addAttribute("id", dto.getBoardId());
-		return "redirect:/board/get";
+		
+		return ResponseEntity.status(500).body("");
 	}
 	
 	@DeleteMapping(path = "delete/{id}", produces = "text/plain;charset=UTF-8" )
