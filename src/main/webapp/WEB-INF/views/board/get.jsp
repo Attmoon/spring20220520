@@ -84,7 +84,6 @@
 									</div>
 									\${list[i].content }
 	
-	
 								</div>
 	
 								<div id="replyEditFormContainer\${list[i].id }"
