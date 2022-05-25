@@ -1,5 +1,7 @@
 package com.choong.spr.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +32,14 @@ public class MemberService {
 	public boolean hasMemeberNickName(String nickName) {
 		
 		return mapper.countMemberNickName(nickName) > 0;
+	}
+
+	public List<MemberDto> listMember() {
+		return mapper.selectAllMamber();
+	}
+
+	public MemberDto getMemberById(String id) {
+		return mapper.selectMemberById(id);
 	}
 
 }

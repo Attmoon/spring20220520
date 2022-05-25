@@ -1,5 +1,7 @@
 package com.choong.spr.mapper;
 
+import java.util.List;
+
 import com.choong.spr.domain.MemberDto;
 
 public interface MemberMapper {
@@ -11,5 +13,11 @@ public interface MemberMapper {
 	int countMemberEmail(String email);
 
 	int countMemberNickName(String nickName);
+
+	List<MemberDto> listMamber();
+
+	List<MemberDto> selectAllMamber();
+
+	MemberDto selectMemberById(String id);
 
 }

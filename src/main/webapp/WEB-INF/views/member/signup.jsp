@@ -15,6 +15,12 @@
 
 <script>
 	$(document).ready(function() {
+		// 중복, 암호 확인 변수
+		let idOk = false;
+		let pwOk = false;
+		let emailOk = false;
+		let nickNameOk = false;
+		
 		$("#checkIdButton1").click(function(e) {
 			e.preventDefault(); // 원래 하던일을 진행하지 않고
 			
@@ -22,6 +28,7 @@
 			const data = {
 					id : $("#form1").find("[name=id]").val() // form1안에 name이 id인것의 값
 			};
+			idOk = false;
 			$.ajax({
 				url : "${appRoot}/member/check",
 				type : "get",
@@ -30,6 +37,7 @@
 					switch (data) {
 					case "ok" :
 						$("#idMessage1").text("사용 가능한 아이디입니다.");
+						idOk = true;
 						break;
 					case "notOk" :
 						$("#idMessage1").text("사용 불가능한 아이디입니다.");
@@ -41,6 +49,7 @@
 				},
 				complete : function() {
 					$("#checkIdButton1").removeAttr("disabled");
+					enableSubmit();
 				}
 			});
 		});
@@ -52,6 +61,7 @@
 			const data = {
 					email : $("#form1").find("[name=email]").val() // form1안에 name이 id인것의 값
 			};
+			emailOk = false;
 			$.ajax({
 				url : "${appRoot}/member/check",
 				type : "get",
@@ -60,6 +70,7 @@
 					switch (data) {
 					case "ok" :
 						$("#eMailMessage1").text("사용 가능한 이메일입니다.");
+						emailOk = true;
 						break;
 					case "notOk" :
 						$("#eMailMessage1").text("사용 불가능한 이메일입니다.");
@@ -71,6 +82,7 @@
 				},
 				complete : function() {
 					$("#checkEmailButton1").removeAttr("disabled");
+					enableSubmit();
 				}
 			});
 		});
@@ -82,6 +94,7 @@
 			const data = {
 					nickName : $("#form1").find("[name=nickName]").val() // form1안에 name이 id인것의 값
 			};
+			nickNameOk = false;
 			$.ajax({
 				url : "${appRoot}/member/check",
 				type : "get",
@@ -90,6 +103,7 @@
 					switch (data) {
 					case "ok" :
 						$("#nickNameMessage1").text("사용 가능한 닉네임입니다.");
+						nickNameOk = true;
 						break;
 					case "notOk" :
 						$("#nickNameMessage1").text("사용 불가능한 닉네임입니다.");
@@ -101,10 +115,35 @@
 				},
 				complete : function() {
 					$("#checkNickNameButton1").removeAttr("disabled");
+					enableSubmit();
 				}
 			});
 		});
 		
+		// 패스워드 오타 확인
+		$("#passwordInput1, #passwordInput2").keyup(function() {
+			const pw1 = $("#passwordInput1").val();
+			const pw2 = $("#passwordInput2").val();
+			
+			pwOk = false;
+			if (pw1 === pw2) {
+				$("#passwordMessage1").text("패스워드가 일치합니다.")
+				pwOk = true;
+			} else {
+				$("#passwordMessage1").text("패스워드가 일치하지 않습니다.")
+			}
+			
+			enableSubmit();
+		});
+		
+		// 회원가입 submit 버튼 활성화/비활성화
+		const enableSubmit = function() {
+			if (idOk && pwOk && emailOk && nickNameOk) {
+				$("#submitButton1").removeAttr("disabled");
+			} else {
+				$("#submitButton1").attr("disabled", ""); // 그외엔 disabled가 그대로 남아있으면됨
+			}
+		}
 	});
 </script>
 </head>
@@ -118,15 +157,20 @@
 	<p id="idMessage1"></p>	
 	<br />
 	
-	패스워드 : <input type="password" name="password" /> <br />
+	패스워드 : <input id="passwordInput1" type="text" name="password" /> <br />
+	
+	패스워드확인 : <input id="passwordInput2" type="text" name="passwordConfirm" /> <br />
+	<p id="passwordMessage1"></p>
+	
 	이메일 : <input type="email" name="email" />
 	<button id="checkEmailButton1" type="button">이메일 중복 확인</button>
 	<p id="eMailMessage1"></p>
 	닉네임 : <input type="text" name="nickName" />
 	<button id="checkNickNameButton1" type="button">닉네임 중복 확인</button>
 	<p id="nickNameMessage1"></p>
+	<br />
 	
-	<button>회원가입</button>
+	<button id="submitButton1" disabled>회원가입</button>
 </form>
 
 
