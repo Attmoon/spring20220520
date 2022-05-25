@@ -4,6 +4,12 @@ import com.choong.spr.domain.MemberDto;
 
 public interface MemberMapper {
 
-	boolean insertMember(MemberDto member);
+	int insertMember(MemberDto member);
+
+	int countMemberId(String id);
+
+	int countMemberEmail(String email);
+
+	int countMemberNickName(String nickName);
 
 }
