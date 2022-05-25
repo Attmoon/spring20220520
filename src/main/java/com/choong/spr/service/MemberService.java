@@ -42,4 +42,14 @@ public class MemberService {
 		return mapper.selectMemberById(id);
 	}
 
+	public boolean removeMember(MemberDto dto) {
+		MemberDto member = mapper.selectMemberById(dto.getId());
+		
+		if (member.getPassword().equals(dto.getPassword())) {
+			return mapper.deleteMemberById(dto.getId()) == 1;
+		}
+		
+		return false;
+	}
+
 }

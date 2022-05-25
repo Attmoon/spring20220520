@@ -95,4 +95,16 @@ public class MemberController {
 		model.addAttribute("member", member);
 	}
 	
+	@PostMapping("remove")
+	public String removeMember(MemberDto dto, RedirectAttributes rttr) {
+		boolean success = service.removeMember(dto);
+		
+		if (success) {
+			rttr.addFlashAttribute("message", "회원 탈퇴 되었습니다.");
+			return "redirect:/board/list";
+		} else {
+			rttr.addAttribute("id", dto.getId());
+			return "redirect:/member/get";
+		}
+	}
 }

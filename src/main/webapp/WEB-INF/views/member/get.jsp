@@ -39,11 +39,14 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        ...
+	      <form id="form1" action="${appRoot }/member/remove" method="post">
+	      	<input type="hidden" value="${member.id }" name="id" />
+	        암호 : <input type="text" name="password" />
+	      </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button form="form1" type="submit" class="btn btn-danger">탈퇴</button> <%-- form밖에 있어도 form의 attribute역할하기 --%>
       </div>
     </div>
   </div>
