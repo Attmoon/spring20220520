@@ -52,4 +52,14 @@ public class MemberService {
 		return false;
 	}
 
+	public boolean modifyMember(MemberDto dto) {
+		MemberDto member = mapper.selectMemberById(dto.getId());
+		
+		if (member.getPassword().equals(dto.getPassword())) {
+			return mapper.modifyMemberById(dto.getId()) == 1;
+		}
+		
+		return false;
+	}
+
 }

@@ -107,4 +107,18 @@ public class MemberController {
 			return "redirect:/member/get";
 		}
 	}
+	
+	@PostMapping("modify")
+	public String modifyMember(MemberDto dto, RedirectAttributes rttr) {
+		boolean success = service.modifyMember(dto);
+		
+		if (success) {
+			rttr.addFlashAttribute("message", "회원 수정 되었습니다.");
+			return "redirect:/board/list";
+		} else {
+			rttr.addAttribute("id", dto.getId());
+			return "redirect:/member/get";
+		}
+	}
+	
 }

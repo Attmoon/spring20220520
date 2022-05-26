@@ -43,4 +43,9 @@
 		DELETE FROM Member
 		WHERE id = #{id}
 	</delete>
+	
+	<update id="modifyMemberById">
+		UPDATE FROM Member
+		WHERE id = #{id}
+	</update>
 </mapper>
