@@ -44,8 +44,11 @@
 		WHERE id = #{id}
 	</delete>
 	
-	<update id="modifyMemberById">
-		UPDATE FROM Member
+	<update id="updateMember" >
+		UPDATE Member 
+		SET password = #{password}, 
+			email = #{email}, 
+			nickName = #{nickName}
 		WHERE id = #{id}
 	</update>
 </mapper>

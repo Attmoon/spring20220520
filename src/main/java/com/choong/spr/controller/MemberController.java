@@ -109,16 +109,18 @@ public class MemberController {
 	}
 	
 	@PostMapping("modify")
-	public String modifyMember(MemberDto dto, RedirectAttributes rttr) {
-		boolean success = service.modifyMember(dto);
+	public String modifyMember(MemberDto dto, String oldPassword, RedirectAttributes rttr) {
+		boolean success = service.modifyMember(dto, oldPassword);
 		
 		if (success) {
 			rttr.addFlashAttribute("message", "회원 수정 되었습니다.");
-			return "redirect:/board/list";
 		} else {
-			rttr.addAttribute("id", dto.getId());
-			return "redirect:/member/get";
+			rttr.addAttribute("message", "회원 정보가 수정되지 않았습니다.");
 		}
+		
+		rttr.addFlashAttribute("member", dto); // model에 붙음
+		rttr.addAttribute("id", dto.getId()); // query string에 붙음
+		return "redirect:/member/get";
 	}
 	
 }

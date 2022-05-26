@@ -52,11 +52,12 @@ public class MemberService {
 		return false;
 	}
 
-	public boolean modifyMember(MemberDto dto) {
-		MemberDto member = mapper.selectMemberById(dto.getId());
+	public boolean modifyMember(MemberDto dto, String oldPassword) {
+		// db에서 member 읽어서
+		MemberDto oldMember = mapper.selectMemberById(dto.getId());
 		
-		if (member.getPassword().equals(dto.getPassword())) {
-			return mapper.modifyMemberById(dto.getId()) == 1;
+		if (oldMember.getPassword().equals(oldPassword)) {
+			return mapper.updateMember(dto) == 1;
 		}
 		
 		return false;
