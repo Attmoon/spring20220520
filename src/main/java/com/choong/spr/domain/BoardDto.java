@@ -12,6 +12,7 @@ public class BoardDto {
 	private String body;
 	private LocalDateTime inserted;
 	private String memberId;
+	private String writerNickName;
 	private int numOfReply;
 
 	public String getPrettyInserted() {

@@ -2,6 +2,8 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -241,9 +243,19 @@
 			<div class="col">
 				<h1>
 					글 본문
-					<button id="edit-button1" class="btn btn-secondary">
-						<i class="fa-solid fa-pen-to-square"></i>
-					</button>
+					
+					<sec:authorize access="isAuthenticated()">
+						<sec:authentication property="principal" var="principal" />
+						<!-- (글 작성한 사람)
+						${principal.username}
+						${board.memberId} 
+						 -->
+						<c:if test="${principal.username == board.memberId }">
+							<button id="edit-button1" class="btn btn-secondary">
+								<i class="fa-solid fa-pen-to-square"></i>
+							</button>
+						</c:if>
+					</sec:authorize>
 				</h1>
 
 				<c:if test="${not empty message }">
@@ -264,7 +276,13 @@
 						<textarea class="form-control" name="body" id="textarea1"
 							cols="30" rows="10" readonly>${board.body }</textarea>
 					</div>
-
+					
+					<div>
+						<label for="input2" class="form-label">작성자</label>
+						<input id="input3" class="form-control" type="text"
+							value="${board.writerNickName }" readonly />
+					</div>
+					
 					<div>
 						<label for="input2" class="form-label">작성일시</label>
 						<input class="form-control" type="datetime-local"
@@ -278,7 +296,7 @@
 			</div>
 		</div>
 	</div>
-
+	
 
 	<%-- 댓글 추가 form --%>
 	<!-- .container.mt-3>.row>.col>form -->
@@ -310,47 +328,6 @@
 				<h3>댓글 <span id="numOfReply1"></span> 개</h3>
 
 				<ul id="replyList1" class="list-group">
-					<%-- 
-					<c:forEach items="${replyList }" var="reply">
-						<li class="list-group-item">
-							<div id="replyDisplayContainer${reply.id }">
-								<div class="fw-bold">
-									<i class="fa-solid fa-comment"></i>
-									${reply.prettyInserted}
-									<span class="reply-edit-toggle-button badge bg-info text-dark"
-										id="replyEditToggleButton${reply.id }"
-										data-reply-id="${reply.id }">
-										<i class="fa-solid fa-pen-to-square"></i>
-									</span>
-									<span class="reply-delete-button badge bg-danger"
-										data-reply-id="${reply.id }">
-										<i class="fa-solid fa-trash-can"></i>
-									</span>
-								</div>
-								<c:out value="${reply.content }" />
-
-
-							</div>
-
-							<div id="replyEditFormContainer${reply.id }"
-								style="display: none;">
-								<form action="${appRoot }/reply/modify" method="post">
-									<div class="input-group">
-										<input type="hidden" name="boardId" value="${board.id }" />
-										<input type="hidden" name="id" value="${reply.id }" />
-										<input class="form-control" value="${reply.content }"
-											type="text" name="content" required />
-										<button class="btn btn-outline-secondary">
-											<i class="fa-solid fa-comment-dots"></i>
-										</button>
-									</div>
-								</form>
-							</div>
-
-
-						</li>
-					</c:forEach>
-					--%>
 				</ul>
 			</div>
 		</div>
