@@ -11,8 +11,9 @@
 	<!-- http의 request와 response에 관련된 설정 -->
 	<security:http>
 		<security:csrf disabled="true"/>
-		<security:form-login default-target-url="/board/list" /> <!-- 로그인 성공시 경로 -->
+		<security:form-login login-page="/member/login" default-target-url="/board/list" /> <!-- 로그인 성공시 경로 -->
 		<security:logout logout-success-url="/board/list" />
+		<security:remember-me/>
 		
 		<!-- access 속성 작성법 673page -->
 		<security:intercept-url pattern="/board/insert" access="isAuthenticated()" /> <!-- 특정 경로로 오는것 캐치 -->
