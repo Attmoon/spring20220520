@@ -12,6 +12,11 @@
 	<security:http>
 		<security:csrf disabled="true"/>
 		<security:form-login default-target-url="/board/list" /> <!-- 로그인 성공시 경로 -->
+		<security:logout logout-success-url="/board/list" />
+		
+		<!-- access 속성 작성법 673page -->
+		<security:intercept-url pattern="/board/insert" access="isAuthenticated()" /> <!-- 특정 경로로 오는것 캐치 -->
+		<security:intercept-url pattern="/member/list" access="hasRole('ADMIN')" />
 	</security:http>
 	
 	<!-- 인증 매니저
