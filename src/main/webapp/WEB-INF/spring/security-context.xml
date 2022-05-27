@@ -8,11 +8,33 @@
 	<!--  652page -->
 	<bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
 	
+	<!-- http의 request와 response에 관련된 설정 -->
 	<security:http>
 		<security:csrf disabled="true"/>
-		<security:form-login/>
+		<security:form-login default-target-url="/board/list" /> <!-- 로그인 성공시 경로 -->
 	</security:http>
 	
-	<security:authentication-manager></security:authentication-manager>
+	<!-- 인증 매니저
+	1. autenticate 인증 (로그인 가능한지 불가능한지 판단)
+	2. aythorization 권한
+	 -->
+	<!-- dataSource는 connection역할 -->
+	<security:authentication-manager> <!-- 내놔 정보 -->
+		<security:authentication-provider> <!-- db를 통해 제공 -->
+			<security:jdbc-user-service 
+				data-source-ref="dataSource"
+				users-by-username-query="
+					SELECT id, password, 1
+					FROM Member
+					WHERE id = ?
+				"
+				authorities-by-username-query="
+					SELECT memberId, role
+					FROM Auth
+					WHERE memberId = ?
+				"
+				/>
+		</security:authentication-provider>
+	</security:authentication-manager>
 
 </beans>
