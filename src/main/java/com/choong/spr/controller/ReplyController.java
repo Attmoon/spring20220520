@@ -49,31 +49,48 @@ public class ReplyController {
 
 	@PutMapping(path = "modify", produces = "text/plain;charset=UTF-8")
 	public ResponseEntity<String> modify(@RequestBody ReplyDto dto, Principal principal) {
-		boolean success = service.updateReply(dto, principal);
-
-		if (success) {
-			return ResponseEntity.ok("댓글이 변경되었습니다.");
+		
+		if (principal == null) {
+			return ResponseEntity.status(401).build();
+		} else {
+			boolean success = service.updateReply(dto, principal);
+			
+			if (success) {
+				return ResponseEntity.ok("댓글이 변경되었습니다.");
+			}
+			return ResponseEntity.status(500).body("");
 		}
 		
-		return ResponseEntity.status(500).body("");
+		
 	}
 	
 	@DeleteMapping(path = "delete/{id}", produces = "text/plain;charset=UTF-8" )
-	public ResponseEntity<String> delete(@PathVariable("id") int id) {
-		boolean success = service.deleteReply(id);
+	public ResponseEntity<String> delete(@PathVariable("id") int id, Principal principal) {
 		
-		if (success) {
-			return ResponseEntity.ok("댓글을 삭제 하였습니다.");
+		if (principal == null) {
+			return ResponseEntity.status(401).build();
 		} else {
-			return ResponseEntity.status(500).body(""); // 에러메시지 없음
+			boolean success = service.deleteReply(id, principal);
+			
+			if (success) {
+				return ResponseEntity.ok("댓글을 삭제 하였습니다.");
+			} else {
+				return ResponseEntity.status(500).body(""); // 에러메시지 없음
+			}
 		}
+		
 		
 	}
 	
 	// ajax가 mapping경로로 요청을 보내고 service가 일한 결과를 List<Replydto> 형식으로 응답해줌
 	@GetMapping("list")
-	public List<ReplyDto> list(int boardId) {
-		return service.getReplyByBoardId(boardId);
+	public List<ReplyDto> list(int boardId, Principal principal) {
+		if (principal == null) {
+			return service.getReplyByBoardId(boardId);
+		} else {
+			return service.getReplyByBoardIdWithOwn(boardId, principal.getName());
+		}
+		
 	}
 }
 

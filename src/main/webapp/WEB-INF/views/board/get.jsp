@@ -78,17 +78,18 @@
 									<div class="fw-bold">
 										<i class="fa-solid fa-comment"></i>
 										\${list[i].prettyInserted}
-										<span class="reply-edit-toggle-button badge bg-info text-dark"
-											id="replyEditToggleButton\${list[i].id }"
-											data-reply-id="\${list[i].id }">
-											<i class="fa-solid fa-pen-to-square"></i>
+										
+										<span id="modifyButtonWrapper\${list[i].id }">
 										</span>
-										<span class="reply-delete-button badge bg-danger"
-											data-reply-id="\${list[i].id }">
-											<i class="fa-solid fa-trash-can"></i>
-										</span>
+										
+
+										
 									</div>
-									\${list[i].content }
+									<span class="badge bg-light text-dark">
+										<i class="fa-solid fa-user"></i>
+										\${list[i].writerNickName}
+									</span>
+									<span id="replyContent\${list[i].id }"><span>
 	
 	
 								</div>
@@ -111,6 +112,22 @@
 								
 								`);
 						replyListElement.append(replyElement);
+						$("#replyContent" + list[i].id).text(list[i].content);
+						
+						// own이 true일 때만 수정,삭제 버튼 보이기
+						if (list[i].own) {
+							$("#modifyButtonWrapper" + list[i].id).html(`
+								<span class="reply-edit-toggle-button badge bg-info text-dark"
+									id="replyEditToggleButton\${list[i].id }"
+									data-reply-id="\${list[i].id }">
+									<i class="fa-solid fa-pen-to-square"></i>
+								</span>
+								<span class="reply-delete-button badge bg-danger"
+									data-reply-id="\${list[i].id }">
+									<i class="fa-solid fa-trash-can"></i>
+								</span>
+							`);
+						}
 						
 					} // end of for
 					
@@ -188,6 +205,7 @@
 									$("#replyMessage1").show().text(data).fadeOut(3000);
 								},
 								error : function() {
+									$("#replyMessage1").show().text("댓글을 삭제할 수 없습니다.").fadeOut(3000);
 									console.log(replyId + "댓글 삭제 중 문제 발생됨");
 								},
 								complete : function() {
@@ -333,47 +351,6 @@
 				<h3>댓글 <span id="numOfReply1"></span> 개</h3>
 
 				<ul id="replyList1" class="list-group">
-					<%-- 
-					<c:forEach items="${replyList }" var="reply">
-						<li class="list-group-item">
-							<div id="replyDisplayContainer${reply.id }">
-								<div class="fw-bold">
-									<i class="fa-solid fa-comment"></i>
-									${reply.prettyInserted}
-									<span class="reply-edit-toggle-button badge bg-info text-dark"
-										id="replyEditToggleButton${reply.id }"
-										data-reply-id="${reply.id }">
-										<i class="fa-solid fa-pen-to-square"></i>
-									</span>
-									<span class="reply-delete-button badge bg-danger"
-										data-reply-id="${reply.id }">
-										<i class="fa-solid fa-trash-can"></i>
-									</span>
-								</div>
-								<c:out value="${reply.content }" />
-
-
-							</div>
-
-							<div id="replyEditFormContainer${reply.id }"
-								style="display: none;">
-								<form action="${appRoot }/reply/modify" method="post">
-									<div class="input-group">
-										<input type="hidden" name="boardId" value="${board.id }" />
-										<input type="hidden" name="id" value="${reply.id }" />
-										<input class="form-control" value="${reply.content }"
-											type="text" name="content" required />
-										<button class="btn btn-outline-secondary">
-											<i class="fa-solid fa-comment-dots"></i>
-										</button>
-									</div>
-								</form>
-							</div>
-
-
-						</li>
-					</c:forEach>
-					--%>
 				</ul>
 			</div>
 		</div>

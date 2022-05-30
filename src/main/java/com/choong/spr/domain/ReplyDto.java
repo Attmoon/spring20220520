@@ -1,5 +1,6 @@
 package com.choong.spr.domain;
 
+
 import java.time.LocalDateTime;
 
 import lombok.Data;
@@ -11,6 +12,8 @@ public class ReplyDto {
 	private String content;
 	private LocalDateTime inserted;
 	private String memberId;
+	private String writerNickName;
+	private boolean own;
 
 	public String getPrettyInserted() {
 		// 24시간 이내면 시간만

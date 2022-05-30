@@ -22,7 +22,7 @@ public class ReplyService {
 
 	public List<ReplyDto> getReplyByBoardId(int boardId) {
 		// TODO Auto-generated method stub
-		return mapper.selectAllBoardId(boardId);
+		return mapper.selectAllBoardId(boardId, null); // 두번째 파라미터로받는 값은 없다
 	}
 
 	public boolean updateReply(ReplyDto dto, Principal principal) {
@@ -38,9 +38,21 @@ public class ReplyService {
 		
 	}
 
-	public boolean deleteReply(int id) {
-		// TODO Auto-generated method stub
-		return mapper.deleteReply(id) == 1;
+	public boolean deleteReply(int id, Principal principal) {
+		ReplyDto old = mapper.selectReplyById(id);
+		
+		if(old.getMemberId().equals(principal.getName())) {
+			// 댓글 작성자와 로그인한 유저가 같을때만 삭제
+			return mapper.deleteReply(id) == 1;
+		} else {
+			// 그렇지 않으면 return false;
+			return false;
+		}
+		
+	}
+
+	public List<ReplyDto> getReplyByBoardIdWithOwn(int boardId, String memberId) {
+		return mapper.selectAllBoardId(boardId, memberId);
 	}
 
 }
