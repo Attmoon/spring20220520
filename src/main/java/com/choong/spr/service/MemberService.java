@@ -7,14 +7,23 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.choong.spr.domain.BoardDto;
 import com.choong.spr.domain.MemberDto;
+import com.choong.spr.mapper.BoardMapper;
 import com.choong.spr.mapper.MemberMapper;
+import com.choong.spr.mapper.ReplyMapper;
 
 @Service
 public class MemberService {
 
 	@Autowired
 	private MemberMapper mapper;
+	
+	@Autowired
+	private BoardMapper boardMapper;
+	
+	@Autowired
+	private ReplyMapper replyMapper;
 	
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
@@ -52,7 +61,7 @@ public class MemberService {
 	}
 
 	public List<MemberDto> listMember() {
-		return mapper.selectAllMamber();
+		return mapper.selectAllMember();
 	}
 
 	public MemberDto getMemberById(String id) {
@@ -61,12 +70,23 @@ public class MemberService {
 	
 	@Transactional
 	public boolean removeMember(MemberDto dto) {
+		
 		MemberDto member = mapper.selectMemberById(dto.getId());
 		
 		String rawPW = dto.getPassword();
 		String encodedPW = member.getPassword();
 		
 		if (passwordEncoder.matches(rawPW, encodedPW)) {
+			// 댓글 삭제
+			replyMapper.deleteByMemberId(dto.getId());
+			// 이 멤버가 쓴 게시글에 달린 다른사람 댓글 삭제
+			List<BoardDto> boardList = boardMapper.listByMemeberId(dto.getId());
+			for (BoardDto board : boardList) {
+				replyMapper.deleteByBoardId(board.getId());
+			}
+			// 이 멤버가 쓴 게시글 삭제
+			boardMapper.deleteByMemberId(dto.getId());
+			
 			int cnt1 = mapper.deleteAuthById(dto.getId());
 			int cnt2 = mapper.deleteMemberById(dto.getId());
 			

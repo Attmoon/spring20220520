@@ -27,7 +27,7 @@
 		WHERE nickName = #{nickName}
 	</select>
 	
-	<select id="selectAllMamber" resultType="com.choong.spr.domain.MemberDto">
+	<select id="selectAllMember" resultType="com.choong.spr.domain.MemberDto">
 		SELECT id, password, email, nickName, inserted
 		FROM Member
 		ORDER BY inserted DESC

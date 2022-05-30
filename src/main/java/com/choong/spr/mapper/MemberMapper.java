@@ -18,7 +18,7 @@ public interface MemberMapper {
 
 	List<MemberDto> listMamber();
 
-	List<MemberDto> selectAllMamber();
+	List<MemberDto> selectAllMember();
 
 	MemberDto selectMemberById(String id);
 
@@ -29,6 +29,7 @@ public interface MemberMapper {
 	int insertAuth(@Param("id") String id, @Param("auth") String auth);
 
 	int deleteAuthById(String id);
+
 
 
 }

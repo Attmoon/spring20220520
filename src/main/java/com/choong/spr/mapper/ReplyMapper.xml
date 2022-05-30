@@ -45,7 +45,12 @@
 		   memberId,
 		   inserted
 	FROM Reply
-	WHERE id = #{id}
+	WHERE memberId = #{memberId}
 	</select>
+	
+	<delete id="deleteByMemberId">
+	DELETE FROM Reply
+	WHERE memberId = #{memberId}
+	</delete>
 	
 </mapper>
