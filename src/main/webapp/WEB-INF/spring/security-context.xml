@@ -17,12 +17,12 @@
 		
 		<!-- access 속성 작성법 673page -->
 		<!-- 게시글 create, update, delete -->
-		<security:intercept-url pattern="/board/insert" access="isAuthenticated()" /> <!-- 특정 경로로 오는것 캐치(로그인) -->
+		<security:intercept-url pattern="/board/insert" access="isAuthenticated()" /> <!-- 특정 경로로 오는것은 인증된 사용자만(로그인된) 가능하게끔 -->
 		<security:intercept-url pattern="/board/modify" access="isAuthenticated()" />
 		<security:intercept-url pattern="/board/remove" access="isAuthenticated()" />
 		
 		<!-- 댓글 create, update, delete -->
-		<security:intercept-url pattern="/reply/insert" access="isAuthenticated()" />
+		<!-- <security:intercept-url pattern="/reply/insert" access="isAuthenticated()" /> -->
 		<security:intercept-url pattern="/reply/modify" access="isAuthenticated()" />
 		<security:intercept-url pattern="/reply/delete" access="isAuthenticated()" />
 		
