@@ -136,7 +136,7 @@
 						
 						const id = $(this).attr("data-reply-id");
 						const formElem = $("#replyEditFormContainer" + id).find("form");
-						// const data = formElem.serialize(); // put 방식은 못 controller에서 못받음
+						// const data = formElem.serialize(); // put 방식은 controller에서 못받음
 						const data = {
 							boardId : formElem.find("[name=boardId]").val(),
 							id : formElem.find("[name=id]").val(),

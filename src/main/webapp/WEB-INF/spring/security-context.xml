@@ -36,8 +36,8 @@
 	</security:http>
 	
 	<!-- 인증 매니저
-	1. autenticate 인증 (로그인 가능한지 불가능한지 판단)
-	2. aythorization 권한
+	1. authenticate 인증 (로그인 가능한지 불가능한지 판단)
+	2. authorization 권한
 	 -->
 	<!-- dataSource는 connection역할 -->
 	<security:authentication-manager> <!-- 내놔 정보 -->
