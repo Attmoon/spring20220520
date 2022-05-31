@@ -65,4 +65,10 @@
 	DELETE FROM Board
 	WHERE memberId = #{memberId}
 	</delete>
+	
+	<insert id="insertFile">
+	INSERT INTO File (boardId, fileName)
+	VALUES (#{boardId}, #{fileName})
+	</insert>
+	
 </mapper>
