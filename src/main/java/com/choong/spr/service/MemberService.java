@@ -1,5 +1,6 @@
 package com.choong.spr.service;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -110,6 +111,12 @@ public class MemberService {
 		}
 		
 		return false;
+	}
+
+	public void initPassword(String id) {
+		
+		String pw = passwordEncoder.encode(id);
+		mapper.updatePasswordById(id, pw);
 	}
 
 }
