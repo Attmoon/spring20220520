@@ -116,8 +116,12 @@ public class BoardService {
 	}
 
 	public BoardDto getBoardById(int id) {
-		// TODO Auto-generated method stub
-		return mapper.selectBoardById(id);
+		BoardDto board = mapper.selectBoardById(id);
+		List<String> fileNames = mapper.selectFlieNameByBoard(id);
+		
+		board.setFileName(fileNames);
+		
+		return board;
 	}
 
 	public boolean updateBoard(BoardDto dto) {
