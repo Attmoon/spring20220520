@@ -1,9 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="my" tagdir="/WEB-INF/tags" %>
-<%@ page import="java.util.*" %>
-<% request.setCharacterEncoding("utf-8"); %>
+<%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,34 +15,53 @@
 </head>
 <body>
 <my:navBar current="memberList"></my:navBar>
-	<table class="table">
-  <thead>
-    <tr>
-      <th scope="col">ID</th>
-      <th scope="col">PW</th>
-      <th scope="col">EMAIL</th>
-      <th scope="col">NICK</th>
-      <th scope="col">가입일시</th>
-    </tr>
-  </thead>
-  <tbody>
-  <c:forEach items="${memberList }" var="member">
-    <tr>
-    		<td>
-    			<c:url value="/member/get" var="getMemberUrl">
-    				<c:param name="id" value="${member.id }"></c:param>
-    			</c:url>
-    			<a href="${getMemberUrl }">
-    				${member.id }
-    			</a>
-    		</td>
-      		<td>${member.password }</td>
-      		<td>${member.email }</td>
-      		<td>${member.nickName }</td>
-      		<td>${member.inserted }</td>
-    </tr>
-   </c:forEach>
-  </tbody>
-</table>
+
+<div class="container">
+	<div class="row">
+		<div class="col">
+		
+
+			<h1>회원 목록</h1>
+			
+			<table class="table">
+				<thead>
+					<tr>
+						<th>ID</th>
+						<th>PW</th>
+						<th>EMAIL</th>
+						<th>NICK</th>
+						<th>가입일시</th>
+					</tr>
+				</thead>
+				<tbody>
+					<c:forEach items="${memberList }" var="member">
+						<tr>
+							<td>
+								<c:url value="/member/get" var="getMemberUrl">
+									<c:param name="id" value="${member.id }"></c:param>
+								</c:url>
+								<a href="${getMemberUrl }">
+									${member.id }
+								</a>
+							</td>
+							<td>${member.password }</td>
+							<td>${member.email }</td>
+							<td>${member.nickName }</td>
+							<td>${member.inserted }</td>
+						</tr>
+					</c:forEach>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
 </body>
 </html>
+
+
+
+
+
+
+
+

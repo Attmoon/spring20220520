@@ -138,7 +138,7 @@
 						
 						const id = $(this).attr("data-reply-id");
 						const formElem = $("#replyEditFormContainer" + id).find("form");
-						// const data = formElem.serialize(); // put 방식은 controller에서 못받음
+						// const data = formElem.serialize(); // put 방식은 못 controller에서 못받음
 						const data = {
 							boardId : formElem.find("[name=boardId]").val(),
 							id : formElem.find("[name=id]").val(),
@@ -261,6 +261,13 @@
 	});
 </script>
 
+<style>
+	.delete-checkbox:checked {
+		background-color: #dc3545;
+		border-color: #dc3545;
+	}
+</style>
+
 <title>Insert title here</title>
 </head>
 <body>
@@ -287,18 +294,18 @@
 					<div class="alert alert-primary">${message }</div>
 				</c:if>
 
-				<form id="form1" action="${appRoot }/board/modify" method="post" enctype="multipart/form-data" >
+				<form id="form1" action="${appRoot }/board/modify" method="post" enctype="multipart/form-data">
 					<input type="hidden" name="id" value="${board.id }" />
 
 					<div>
 						<label class="form-label" for="input1">제목</label>
-						<input class="form-control" type="text" name="title" required
+						<input class="form-control mb-3" type="text" name="title" required
 							id="input1" value="${board.title }" readonly />
 					</div>
 
 					<div>
 						<label class="form-label" for="textarea1">본문</label>
-						<textarea class="form-control" name="body" id="textarea1"
+						<textarea class="form-control mb-3" name="body" id="textarea1"
 							cols="30" rows="10" readonly>${board.body }</textarea>
 					</div>
 					
@@ -309,34 +316,39 @@
 						pageContext.setAttribute("encodedFileName", encodedFileName);
 						%>
 						<div class="row">
-							<div class="col-1">
+							<div class="col-lg-1 col-12 d-flex align-items-center">
 								<div class="d-none removeFileCheckbox">
-									삭제 <br />
-									<input type="checkbox" name="removeFileList" value="${file }" />
+									<div class="form-check form-switch">
+											<label class="form-check-label text-danger">
+												<input class="form-check-input delete-checkbox" type="checkbox" name="removeFileList" value="${file }"/>
+												<i class="fa-solid fa-trash-can"></i>
+											</label>
+									</div>
 								</div>
 							</div>
-							<div class="col-11">
+							<div class="col-lg-11 col-12">
 								<div>
-									<img class="img-fluid" src="${imageUrl }/board/${board.id }/${encodedFileName }" alt="" />
+									<img class="img-fluid img-thumbnail" src="${imageUrl }/board/${board.id }/${encodedFileName }" alt="" />
 								</div>
 							</div>
 						</div>
 					</c:forEach>
 					
-					<div id="addFileInputContainer1" class="d-none">
-						 파일 추가 :
-						 <input type="file" accept="image/*" multiple="multiple" name="addFileList" />
+					<div id="addFileInputContainer1" class="my-3 d-none">
+						<label for="fileInput1" class="form-label"></label>
+						파일 추가
+						<input id="fileInput1" class="form-control mb-3" type="file" accept="image/*" multiple="multiple" name="addFileList" />
 					</div>
 					
 					<div>
 						<label for="input3" class="form-label">작성자</label>
-						<input id="input3" class="form-control" type="text"
+						<input id="input3" class="form-control mb-3" type="text"
 							value="${board.writerNickName }" readonly />
 					</div>
 
 					<div>
 						<label for="input2" class="form-label">작성일시</label>
-						<input class="form-control" type="datetime-local"
+						<input class="form-control mb-3" type="datetime-local"
 							value="${board.inserted }" readonly />
 					</div>
 
@@ -379,6 +391,7 @@
 				<h3>댓글 <span id="numOfReply1"></span> 개</h3>
 
 				<ul id="replyList1" class="list-group">
+				
 				</ul>
 			</div>
 		</div>

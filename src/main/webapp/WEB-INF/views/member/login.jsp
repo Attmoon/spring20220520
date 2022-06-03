@@ -2,8 +2,6 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags" %>
-<%@ page import="java.util.*" %>
-<% request.setCharacterEncoding("utf-8"); %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -19,14 +17,50 @@
 
 	<my:navBar current="login"></my:navBar>
 	
-	<h1>로그인</h1>
+	<div class="container">
 	
-	<form action="${appRoot }/login" method="post">
-		아이디 : <input type="text" name="username" /> <br />
-		패스워드 : <input type="password" name="password" /> <br />
-		<input type="checkbox" name="remember-me" id="" /> 자동로그인
-		<input type="submit" value="로그인" />
-	</form>
+		
+		<div class="row justify-content-center">
+			<div class="col-12 col-lg-6">
+				<h1>로그인 </h1>
+				<form action="${appRoot }/login" method="post">
+					<label for="usernameInput1" class="form-label">
+						아이디 
+					</label>
+					<input id="usernameInput1" class="form-control" type="text" name="username" />
+					
+					<label for="passwordInput1" class="form-label">
+						패스워드
+					</label>
+					<input class="form-control" id="passwordInput1" type="password" name="password" />
+					
+					<div class="form-check">
+						<input class="form-check-input" type="checkbox" name="remember-me" id="rememberMeCheck1" />
+						
+						<label for="rememberMeCheck1" class="form-check-label">
+							자동로그인
+						</label>
+					</div>
+					
+					<input class="btn btn-primary" type="submit" value="로그인" />
+				</form>
+			
+			</div>
+		</div>
+	</div>
 	
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+

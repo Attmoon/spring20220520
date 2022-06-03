@@ -24,16 +24,18 @@
 				<form action="${appRoot }/board/insert" method="post" enctype="multipart/form-data">
 					<div>
 						<label class="form-label" for="input1">제목</label>
-						<input class="form-control" type="text" name="title" required id="input1" />
+						<input class="form-control mb-3" type="text" name="title" required id="input1" />
 					</div>
 					
 					<div>
 						<label class="form-label" for="textarea1">본문</label>
-						<textarea class="form-control" name="body" id="textarea1" cols="30" rows="10"></textarea>
+						<textarea class="form-control mb-3" name="body" id="textarea1" cols="30" rows="10"></textarea>
 					</div>
 					<div>
+						<label for="fileInput1" class="form-label">
 						파일
-						<input multiple="multiple" type="file" name="file" accept="image/*" />
+						</label>
+						<input class="form-control mb-3" multiple="multiple" type="file" name="file" accept="image/*"/>
 					</div>
 					
 					<button class="btn btn-primary">작성</button>
