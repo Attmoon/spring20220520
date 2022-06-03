@@ -60,18 +60,22 @@ public class BoardService {
 		// 게시글 등록
 		int cnt = mapper.insertBoard(board);
 		
+		addFiles(board.getId(), files);
+		
+		return cnt == 1;
+	}
+
+	private void addFiles(int id, MultipartFile[] files) {
 		// 파일 등록
 		if (files != null) {
 			for (MultipartFile file : files) {
 				
 				if (file.getSize() > 0) {
-					mapper.insertFile(board.getId(), file.getOriginalFilename());
-					saveFileAwsS3(board.getId(), file); // s3에 업로드
+					mapper.insertFile(id, file.getOriginalFilename());
+					saveFileAwsS3(id, file); // s3에 업로드
 				}
 			}
 		}
-		
-		return cnt == 1;
 	}
 
 	private void saveFileAwsS3(int id, MultipartFile file) {
@@ -124,26 +128,48 @@ public class BoardService {
 		return board;
 	}
 
-	public boolean updateBoard(BoardDto dto) {
-		// TODO Auto-generated method stub
-		return mapper.updateBoard(dto) == 1;
+	@Transactional
+	public boolean updateBoard(BoardDto dto, List<String> removeFileList, MultipartFile[] addFileList) {
+		if (removeFileList != null) {
+			for (String fileName : removeFileList) {
+				deleteFromAwsS3(dto.getId(), fileName);
+				mapper.deleteFileByBoardIdAndFileName(dto.getId(), fileName);
+			}
+		}
+		
+		if (addFileList != null) {
+			// File 테이블에 추가된 파일 insert
+			// s3에 upload
+			addFiles(dto.getId(), addFileList);
+			
+		}
+		// Board 테이블 update
+		int cnt = mapper.updateBoard(dto);
+		return cnt == 1;
 	}
 
 	@Transactional
 	public boolean deleteBoard(int id) {
 		// 파일 목록 읽기
-		String fileName = mapper.selectFileByBoardId(id);
+		List<String> fileList = mapper.selectFlieNameByBoard(id);
 		
-		// s3에서 지우기
-		deleteFromAwsS3(id, fileName);
-		
-		// 파일테이블 삭제
-		mapper.deleteFileByBoardId(id);
+		removeFiles(id, fileList);
 		
 		// 댓글테이블 삭제
 		replyMapper.deleteByBoardId(id);
 		
 		return mapper.deleteBoard(id) == 1;
+	}
+
+	private void removeFiles(int id, List<String> fileList) {
+		// s3에서 지우기
+		for (String fileName : fileList) {
+			
+			deleteFromAwsS3(id, fileName);
+		}
+		
+		// 파일테이블 삭제
+		mapper.deleteFileByBoardId(id);
 	}
 
 	private void deleteFromAwsS3(int id, String fileName) {
